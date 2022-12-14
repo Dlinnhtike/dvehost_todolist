@@ -63,12 +63,14 @@ class RecordsController extends Controller
                 //$records = Record::where('date',date('Y-m-d'))->get();
                 $records = Record::join('users','record.usr_id','=','users.id')
                             ->where('record.usr_id',$user_id)
+                            ->orderBy('record.id','desc')
                             ->get(['record.*','users.name as developer']);
             }else{
                 //if(Auth::user()->rank==2){
                     $uid = Auth::user()->id;
                     $records = Record::join('users','record.usr_id','=','users.id')
                                 ->where('record.usr_id',$uid)
+                                ->orderBy('record.id','desc')
                                 ->get(['record.*','users.name as developer']);
                     //$records = Record::where('usr_id',$uid)->where('date',date('Y-m-d'))->get();
                 //}

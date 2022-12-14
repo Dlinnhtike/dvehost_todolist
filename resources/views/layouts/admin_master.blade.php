@@ -159,7 +159,12 @@
             
           </a>
         </li>
-      
+        <li class="{{ (request()->is('project/list')) ? 'active' : '' }}">
+          <a href="{{url('project/list')}}">
+            <i class="fa fa-cubes text-info"></i> <span>Project List</span>
+            
+          </a>
+        </li>
         
         <li class="{{ (Request::segment(1)=='setup') ? 'active' : '' }} treeview">
           <a href="#">
@@ -187,6 +192,7 @@
             </li>
             @endif
             @if(Auth::user()->rank==2)
+            
             <li class="{{ (request()->is('setup/profile')) ? 'active' : '' }}">
               <a href="{{url('setup/profile')}}"><i class="fa fa-credit-card"></i> Profile</a>
             </li>

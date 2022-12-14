@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 Route::post('adminlogin', 'AdminController@login')->name('admin.login');
 Route::get('logout', 'AdminController@logout')->name('logout');
+Route::get('systemlogin', 'AdminController@logout')->name('systemlogin');
 Route::get('dashboard', 'AdminController@dashboard')->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
@@ -39,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('deleteproject/{id}', 'deleteproject');
         Route::get('projectdetail/{id}', 'projectdetail');
         Route::post('updateproject','updateproject');
+        Route::get('project/list','projectlist')->name('project.list');
     });
 });
 

@@ -198,4 +198,7 @@ class UsersController extends Controller
         $data->save();
         return response()->json(['success'=>'Saved successfully.']);
     }
+    public function projectlist(){
+        return view('backend.setup.projectlist');
+    }
 }

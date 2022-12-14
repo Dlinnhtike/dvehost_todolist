@@ -13,6 +13,10 @@ use Hash;
 use Cookie;
 class AdminController extends Controller
 {
+    public function systemlogin()
+    {
+        return view('backend.login');
+    }
     public function login(Request $request)
     {
        $credentials = $request->validate([
@@ -23,12 +27,12 @@ class AdminController extends Controller
         if (Auth::attempt($credentials)) {
             if($request->has('remember'))
             {
-                Cookie::queue('username', $request->username,1440);
-                Cookie::queue('password', $request->password,1440);
+                Cookie::queue('username', $request->username,43200);
+                Cookie::queue('password', $request->password,43200);
             }
             else{
-                Cookie::queue('username', $request->username,-1440);
-                Cookie::queue('password', $request->password,-1440);
+                Cookie::queue('username', $request->username,-43200);
+                Cookie::queue('password', $request->password,-43200);
             }
                 $request->session()->regenerate();
                 return redirect()->intended('dashboard');
@@ -50,12 +54,14 @@ class AdminController extends Controller
             //$records = Record::where('date',date('Y-m-d'))->get();
             $records = Record::join('users','record.usr_id','=','users.id')
                         //->where('record.date',$date)
+                        ->orderBy('record.id','desc')
                         ->get(['record.*','users.name as developer']);
         }               
         if(Auth::user()->rank==2){
             $uid = Auth::user()->id;
             $records = Record::join('users','record.usr_id','=','users.id')
                         //->where('record.date',$date)
+                        ->orderBy('record.id','desc')
                         ->where('record.usr_id',$uid)
                         ->get(['record.*','users.name as developer']);
             //$records = Record::where('usr_id',$uid)->where('date',date('Y-m-d'))->get();
