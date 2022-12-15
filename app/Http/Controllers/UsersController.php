@@ -153,12 +153,12 @@ class UsersController extends Controller
 
     public function project(Request $request){
         if ($request->ajax()) {
-            $data = Project::select('id','project')->get();
+            $data = Project::select('id','project','deadline','status')->get();
             return Datatables::of($data)->addIndexColumn()
            
                 ->addColumn('action', function($row){
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-warning edit">Edit</a>';
-                    $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger delete">Delete</a>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="btn btn-sm btn-warning edit">Edit</a>';
+                    $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn  btn-sm btn-danger delete">Delete</a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -171,9 +171,18 @@ class UsersController extends Controller
     {
         $validateData = $request->validate([
             'project' => 'required',
+            'status' => 'required',
         ]);
+        if($request->deadline==''){
+            $date = '0000-00-00';
+        }
+        else{
+            $date = $request->deadline;
+        }
         $data = new Project;
         $data->project = $request->project;
+        $data->deadline = $date;
+        $data->status = $request->status;
         $data->save();
         return response()->json(['success'=>'Saved successfully.']);
     }
@@ -192,13 +201,31 @@ class UsersController extends Controller
     {
         $validateData = $request->validate([
             'projectname' => 'required',
+            'deadline' => 'required',
+            'status' => 'required',
         ]);
         $data = Project::find($request->id);
         $data->project = $request->projectname;
+        $data->deadline = $request->deadline;
+        $data->status = $request->status;
         $data->save();
         return response()->json(['success'=>'Saved successfully.']);
     }
-    public function projectlist(){
+    public function projectlist(Request $request){
+        if ($request->ajax()) {
+            $data = Project::select('id','project','deadline','status')->get();
+            return Datatables::of($data)->addIndexColumn()
+            ->addColumn('St',function($row){
+                $status ="";
+                   if($row->status=="Urgent"){$status="<span class='text-danger'>Urgent</span>";}
+                   if($row->status=="Done"){$status="<span class='text-success'>Done</span>";}
+                   if($row->status=="Normal"){$status="<span class=''>Normal</span>";}
+                  
+                    return $status;
+                })
+                ->rawColumns(['St'])
+                ->make(true);
+        }
         return view('backend.setup.projectlist');
     }
 }

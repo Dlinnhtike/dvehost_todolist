@@ -35,7 +35,19 @@
           </div>
         </div>
         <div class="box-body">
-        lsite here
+        <table class="table table-bordered table-hover table-striped table-dark" id="example">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Project Name</td>
+                    <td>DeadLine</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+            <tbody>
+            
+            </tbody>
+            </table>
         </div>
         <!-- /.box-body -->
         <div class="box-footer">
@@ -52,7 +64,22 @@
   @push('scripts')
   <script>
   $(function () {
-    
+    var table = $('#example').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ url('project/list') }}",
+        
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            {data: 'project', name: 'project'},
+            {data: 'deadline', name: 'deadline'},
+            {data: 'St', name: 'St'}
+        ],
+        aLengthMenu: [
+            [30, 50, 100, -1],
+            [30, 50, 100, "All"]
+          ],
+    });
   });
   
 </script>

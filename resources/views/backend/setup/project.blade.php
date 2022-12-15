@@ -43,6 +43,8 @@
                 <tr>
                     <td>#</td>
                     <td>Project Name</td>
+                    <td>DeadLine</td>
+                    <td>Status</td>
                     <td>Action</td>
                 </tr>
             </thead>
@@ -79,8 +81,31 @@
                     <input type="text" class="form-control" name="project" id="" placeholder="">
                   </div>
                 </div>
-			
-                
+                <div class="form-group">
+                  <label for="" class="col-sm-3 control-label">Deadline</label>
+                  <div class="col-sm-9">
+                    <input type="date" name="deadline" id="" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="" class="col-sm-3 control-label">Status</label>
+                  <div class="col-sm-9">
+                  <div class="radio">
+                      <label style="padding-right:30px;">
+                        <input type="radio" name="status" id="" value="Normal">
+                        Normal
+                      </label>
+                      <label style="padding-right:30px;">
+                        <input type="radio" name="status" id="" value="Urgent">
+                        <span class="text-danger">Urgent</span>
+                      </label>
+                      <label>
+                        <input type="radio" name="status" id="" value="Done">
+                        <span class="text-success">Done</span>
+                      </label>
+                    </div> 
+                  </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -132,7 +157,32 @@
                   <label for="" class="col-sm-3 control-label">Project Name</label>
                   <div class="col-sm-9">
                   <input type="text" class="form-control" name="projectname" id="projectname" value="">
-                    <input type="hidden" class="form-control" name="id" id="id" value="">
+                  <input type="hidden" class="form-control" name="id" id="id" value="">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="" class="col-sm-3 control-label">Deadline</label>
+                  <div class="col-sm-9">
+                    <input type="date" name="deadline" id="deadline" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="" class="col-sm-3 control-label">Status</label>
+                  <div class="col-sm-9">
+                  <div class="radio">
+                      <label style="padding-right:30px;">
+                        <input type="radio" name="status" id="Normal" value="Normal">
+                        Normal
+                      </label>
+                      <label style="padding-right:30px;">
+                        <input type="radio" name="status" id="Urgent" value="Urgent">
+                        <span class="text-danger">Urgent</span>
+                      </label>
+                      <label>
+                        <input type="radio" name="status" id="Done" value="Done">
+                        <span class="text-success">Done</span>
+                      </label>
+                    </div> 
                   </div>
                 </div>
               </div>
@@ -169,6 +219,8 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
             {data: 'project', name: 'project'},
+            {data: 'deadline', name: 'deadline'},
+            {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         aLengthMenu: [
@@ -243,6 +295,13 @@
         $('#ajaxModal').modal('show');
           $('#id').val(data.id);
           $('#projectname').val(data.project);
+          $('#deadline').val(data.deadline);
+          if(data.status=="Normal"){
+              $('#Normal').attr("checked",'checked');
+            }
+          if(data.status=="Urgent"){
+              $('#Urgent').attr("checked",'checked');
+            }
         });
        });
       
