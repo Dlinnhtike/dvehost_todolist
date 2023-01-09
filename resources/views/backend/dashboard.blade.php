@@ -21,6 +21,18 @@
 
     <!-- Main content -->
     <section class="content">
+    <div class="box box-danger">
+            
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div id="calendar">
+                  
+              </div>
+            </div>
+            <!-- /.box-body -->
+            
+          </div>
+          <!-- /.box -->
      <!-- Small boxes (Stat box) -->
      @if(Auth::user()->rank==1)
      <div class="row">
@@ -220,8 +232,114 @@
         }
       });
     });
-
+    @if(Auth::user()->rank==1)
+    var SITEURL = "{{url('/')}}";
+    var calendar = $('#calendar').fullCalendar({
+      header: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'month, list, next',
+                    //right: 'month, agendaWeek, agendaDay, list',
+                    
+                },
+    editable: true,
+    events: SITEURL + "/fullcalendar",
+    displayEventTime: false,
+    editable: true,
+    eventRender: function (event, element, view) {
+      if (event.allDay === 'true') {
+      event.allDay = true;
+      } else {
+      event.allDay = false;
+      }
+    },
+    selectable: true,
+    selectHelper: true,
+    select: function (start, end, allDay) {
+      var title = prompt('Project Title:');
+      if (title) {
+        var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+        var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+        $.ajax({
+        url: SITEURL + "/fullcalendar/create",
+        data: 'title=' + title + '&start=' + start + '&end=' + end,
+        type: "POST",
+        success: function (data) {
+          toastr.success(data.success);
+        //displayMessage("Added Successfully");
+      }
+      });
+      calendar.fullCalendar('renderEvent',
+      {
+        title: title,
+        start: start,
+        end: end,
+        allDay: allDay
+      },
+      true
+      );
+      }
+      calendar.fullCalendar('unselect');
+    },
+    eventDrop: function (event, delta) {
+      var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+        var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+        $.ajax({
+          url: SITEURL + '/fullcalendar/update',
+          data: 'title=' + event.title + '&start=' + start + '&end=' + end + '&id=' + event.id,
+          type: "POST",
+          success: function (response) {
+          //displayMessage("Updated Successfully");
+        }
+      });
+    },
+    eventClick: function (event) {
+      var deleteMsg = confirm("Do you really want to delete?");
+        if (deleteMsg) {
+        $.ajax({
+          type: "POST",
+          url: SITEURL + '/fullcalendar/delete',
+          data: "&id=" + event.id,
+          success: function (response) {
+            toastr.success("deleted");
+          if(parseInt(response) > 0) {
+            calendar.fullCalendar('removeEvents', event.id);
+          $('#calendar').fullCalendar('removeEvents', event.id);
+          //displayMessage("Deleted Successfully");
+          }
+          }
+        });
+      }
+      }
+    });
+  @endif
   
+  @if(Auth::user()->rank==2)
+   
+    var SITEURL = "{{url('/')}}";
+    var calendar = $('#calendar').fullCalendar({
+      header: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'month, list, next',
+                    //right: 'month, agendaWeek, agendaDay, list',
+                    
+                },
+    editable: true,
+    events: SITEURL + "/fullcalendar",
+    displayEventTime: false,
+    editable: true,
+    eventRender: function (event, element, view) {
+      if (event.allDay === 'true') {
+      event.allDay = true;
+      } else {
+      event.allDay = false;
+      }
+    },
+    selectable: true,
+    selectHelper: true,
+    });
+  @endif
   });
   
 </script>

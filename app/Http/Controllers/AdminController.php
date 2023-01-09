@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\Record;
+use App\Models\Event;
 use App\Http\Requests\StoreUserRequest;
 use DataTables;
 use Hash;
@@ -47,6 +48,7 @@ class AdminController extends Controller
     }
     public function dashboard()
     {
+        
         $date =date('Y-m-d');
         $users = User::all();
         $project = Project::all();

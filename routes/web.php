@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('projectdetail/{id}', 'projectdetail');
         Route::post('updateproject','updateproject');
         Route::get('project/list','projectlist')->name('project.list');
+        
     });
 });
 
@@ -52,5 +53,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('updaterecord/','updaterecord');
         Route::post('record/byname','byname');
         Route::get('deleterecord/{id}','deleterecord');
+    });
+});
+Route::middleware(['auth'])->group(function () {
+    Route::controller(CalendarController::class)->group(function(){
+        Route::get('fullcalendar','index');
+        Route::post('fullcalendar/create','create');
+        Route::post('fullcalendar/delete','destroy');
+        Route::post('fullcalendar/update','update');
     });
 });
